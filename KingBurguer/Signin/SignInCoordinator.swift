@@ -9,6 +9,7 @@ import UIKit
 
 class SignInCoordinator {
     private let window: UIWindow?
+    
     private let navigationController: UINavigationController
     
     init(window: UIWindow?) {
@@ -30,12 +31,12 @@ class SignInCoordinator {
     }
     
     func signUp() {
-        let signUpCoordinator = SignUpCoordinator(navigation: self.navigationController)
+        let signUpCoordinator = SignUpCoordinator(navigation: self.navigationController, window: self.window)
         signUpCoordinator.start()
     }
     
     func goToHome() {
-        let homeCoordinator = HomeCoordinator(navigation: self.navigationController)
+        let homeCoordinator = HomeCoordinator(window: window)
         homeCoordinator.start()
     }
 }

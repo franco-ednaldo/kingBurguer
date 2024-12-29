@@ -8,10 +8,13 @@
 import UIKit
 
 class HomeCoordinator {
+    private let window: UIWindow?
+    
     private let navigationController: UINavigationController
     
-    init(navigation: UINavigationController) {
-        self.navigationController = navigation
+    init(window: UIWindow?) {
+        self.window = window
+        self.navigationController = UINavigationController()
     }
     
     func start() {
@@ -20,5 +23,7 @@ class HomeCoordinator {
         homeVC.viewModel = homeViewModel
         
         self.navigationController.pushViewController(homeVC, animated: true)
+        
+        self.window?.rootViewController = self.navigationController
     }
 }

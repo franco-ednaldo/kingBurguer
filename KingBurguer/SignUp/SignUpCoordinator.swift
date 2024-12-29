@@ -11,8 +11,11 @@ class SignUpCoordinator {
     
     private let navigationController: UINavigationController
     
-    init(navigation: UINavigationController) {
+    private let window: UIWindow?
+    
+    init(navigation: UINavigationController, window: UIWindow?) {
         self.navigationController = navigation
+        self.window = window
     }
     
     func start() {
@@ -26,7 +29,7 @@ class SignUpCoordinator {
     }
     
     func goToHome() {
-        let homeCoordinator = HomeCoordinator(navigation: self.navigationController)
+        let homeCoordinator = HomeCoordinator(window: self.window)
         homeCoordinator.start()
     }
     

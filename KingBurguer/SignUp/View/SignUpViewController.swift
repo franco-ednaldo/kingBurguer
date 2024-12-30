@@ -32,6 +32,7 @@ class SignUpViewController: UIViewController {
     lazy var nameTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
         textField.placeholder = "Digite o nome"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0
@@ -42,6 +43,7 @@ class SignUpViewController: UIViewController {
     lazy var IDCardTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
         textField.placeholder = "Digite o CPF"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0
@@ -52,6 +54,7 @@ class SignUpViewController: UIViewController {
     lazy var emailTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
         textField.placeholder = "Digite o e-mail"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0
@@ -62,6 +65,7 @@ class SignUpViewController: UIViewController {
     lazy var passwordTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
         textField.placeholder = "Digite sua senha"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0
@@ -72,6 +76,7 @@ class SignUpViewController: UIViewController {
     lazy var birthDay: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
         textField.placeholder = "Digite o nome"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0

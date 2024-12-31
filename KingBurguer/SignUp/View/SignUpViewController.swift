@@ -29,60 +29,76 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
-    lazy var nameTextField: UITextField = {
-        let textField = UITextField()
+    lazy var nameTextField: PlaceholderPaddedTextField = {
+        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = .white
         textField.placeholder = "Digite o nome"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0
         textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.returnKeyType = .next
+        textField.tag = 1
+        textField.delegate = self
         return textField
     }()
     
-    lazy var IDCardTextField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = .white
-        textField.placeholder = "Digite o CPF"
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 8.0
-        textField.layer.borderColor = UIColor.lightGray.cgColor
-        return textField
-    }()
-    
-    lazy var emailTextField: UITextField = {
-        let textField = UITextField()
+    lazy var emailTextField: PlaceholderPaddedTextField = {
+        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = .white
         textField.placeholder = "Digite o e-mail"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0
         textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.returnKeyType = .next
+        textField.tag = 2
+        textField.delegate = self
         return textField
     }()
     
-    lazy var passwordTextField: UITextField = {
-        let textField = UITextField()
+    lazy var IDCardTextField: PlaceholderPaddedTextField = {
+        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
+        textField.placeholder = "Digite o CPF"
+        textField.layer.borderWidth = 1.0
+        textField.layer.cornerRadius = 8.0
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.returnKeyType = .next
+        textField.tag = 3
+        textField.delegate = self
+        return textField
+    }()
+    
+    lazy var birthDay: PlaceholderPaddedTextField = {
+        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.backgroundColor = .white
+        textField.placeholder = "Digite data de nascimento"
+        textField.layer.borderWidth = 1.0
+        textField.layer.cornerRadius = 8.0
+        textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.returnKeyType = .next
+        textField.tag = 4
+        textField.delegate = self
+        return textField
+    }()
+    
+    lazy var passwordTextField: PlaceholderPaddedTextField = {
+        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.backgroundColor = .white
         textField.placeholder = "Digite sua senha"
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 8.0
         textField.layer.borderColor = UIColor.lightGray.cgColor
+        textField.returnKeyType = .done
+        textField.tag = 5
+        textField.delegate = self
         return textField
     }()
     
-    lazy var birthDay: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = .white
-        textField.placeholder = "Digite o nome"
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 8.0
-        textField.layer.borderColor = UIColor.lightGray.cgColor
-        return textField
-    }()
     
     lazy var registerButton: LoadingButton = {
         let button = LoadingButton()
@@ -98,11 +114,41 @@ class SignUpViewController: UIViewController {
         
         self.initLayout()
         self.addConstraints()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyBoardNotification), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(onKeyBoardNotification), name: UIResponder.keyboardWillShowNotification, object: nil)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
     
     @objc private func tappedRegister(_ sender: UIButton) {
         self.viewModel?.register()
     }
+    
+    @objc private func onKeyBoardNotification(_ notification: Notification) {
+        let isVisible = notification.name == UIResponder.keyboardWillShowNotification
+        let keyBoardFrame = isVisible ? UIResponder.keyboardFrameEndUserInfoKey : UIResponder.keyboardFrameBeginUserInfoKey
+        
+        if let keyBoardSize = (notification.userInfo?[keyBoardFrame] as? NSValue)?.cgRectValue {
+            onkeyBoardChanged(isVisible, height: keyBoardSize.height)
+        }
+    }
+    
+    private func onkeyBoardChanged(_ visible: Bool, height: CGFloat) {
+        if !visible {
+            self.scrollView.contentInset = .zero
+            self.scrollView.scrollIndicatorInsets = .zero
+        } else {
+            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: height, right: 0)
+            self.scrollView.contentInset = contentInsets
+            self.scrollView.scrollIndicatorInsets = contentInsets
+        }
+    }
+    
     
     private func initLayout() {
         view.addSubview(scrollView)
@@ -110,9 +156,8 @@ class SignUpViewController: UIViewController {
         container.addSubview(nameTextField)
         container.addSubview(emailTextField)
         container.addSubview(IDCardTextField)
-        container.addSubview(passwordTextField)
         container.addSubview(birthDay)
-        container.addSubview(emailTextField)
+        container.addSubview(passwordTextField)
         container.addSubview(registerButton)
     }
     
@@ -144,35 +189,37 @@ class SignUpViewController: UIViewController {
         ]
         
         let emailTextFieldConstraints = [
-            self.emailTextField.topAnchor.constraint(equalTo: self.nameTextField.bottomAnchor, constant: 10),
+            self.emailTextField.topAnchor.constraint(equalTo: self.nameTextField.bottomAnchor, constant: 15),
             self.emailTextField.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.emailTextField.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
             self.emailTextField.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
         ]
         
-        let birthDayConstraints = [
-            self.birthDay.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 10),
-            self.birthDay.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
-            self.birthDay.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.birthDay.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
-        ]
-        
         let IDCardTextFieldConstraints = [
-            self.IDCardTextField.topAnchor.constraint(equalTo: self.birthDay.bottomAnchor, constant: 10),
+            self.IDCardTextField.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 15),
             self.IDCardTextField.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.IDCardTextField.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
             self.IDCardTextField.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
         ]
         
+        let birthDayConstraints = [
+            self.birthDay.topAnchor.constraint(equalTo: self.IDCardTextField.bottomAnchor, constant: 15),
+            self.birthDay.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
+            self.birthDay.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
+            self.birthDay.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
+        ]
+        
+       
+        
         let passwordTextFieldConstraints = [
-            self.passwordTextField.topAnchor.constraint(equalTo: self.IDCardTextField.bottomAnchor, constant: 10),
+            self.passwordTextField.topAnchor.constraint(equalTo: self.birthDay.bottomAnchor, constant: 15),
             self.passwordTextField.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.passwordTextField.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
             self.passwordTextField.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
         ]
         
         let registerButtonConstraints = [
-            self.registerButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 10),
+            self.registerButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 15),
             self.registerButton.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.registerButton.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
             self.registerButton.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
@@ -186,21 +233,6 @@ class SignUpViewController: UIViewController {
         NSLayoutConstraint.activate(IDCardTextFieldConstraints)
         NSLayoutConstraint.activate(passwordTextFieldConstraints)
         NSLayoutConstraint.activate(registerButtonConstraints)
-        
-        //        NSLayoutConstraint.activate([
-        //
-        //
-        //
-        //
-
-        
-
-        
-
-        
-
-        //
-        //        ])
     }
 }
 
@@ -225,4 +257,33 @@ extension SignUpViewController: SignUpViewModelDelegate {
         }
     }
     
+}
+
+extension SignUpViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.returnKeyType == .done {
+            view.endEditing(true)
+            print("Save!")
+        }
+        
+        let nextTag = textField.tag + 1
+        let component = container.findViewById(tag: nextTag)
+        if let field = component {
+            field.becomeFirstResponder()
+        } else {
+            view.endEditing(true)
+        }
+        return false
+    }
+}
+
+extension UIView {
+    func findViewById(tag: Int) -> UIView? {
+        for view in subviews {
+            if view.tag == tag {
+                return view
+            }
+        }
+        return nil
+    }
 }

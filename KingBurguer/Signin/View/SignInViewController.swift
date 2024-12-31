@@ -27,8 +27,8 @@ class SignInViewController: UIViewController {
         return view
     }()
     
-    lazy var emailTextView: UITextField = {
-        let email = UITextField()
+    lazy var emailTextView: PlaceholderPaddedTextField = {
+        let email = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
         email.backgroundColor = .white
         email.placeholder = "Digite seu e-mail"
         email.translatesAutoresizingMaskIntoConstraints = false
@@ -39,8 +39,8 @@ class SignInViewController: UIViewController {
         return email
     }()
     
-    lazy var passwordTextView: UITextField = {
-        let password = UITextField()
+    lazy var passwordTextView: PlaceholderPaddedTextField = {
+        let password = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
         password.backgroundColor = .white
         password.placeholder = "Digite sua senha"
         password.translatesAutoresizingMaskIntoConstraints = false
@@ -170,14 +170,15 @@ class SignInViewController: UIViewController {
         let passwordConstraints = [
             self.passwordTextView.leadingAnchor.constraint(equalTo: self.emailTextView.leadingAnchor),
             self.passwordTextView.trailingAnchor.constraint(equalTo: self.emailTextView.trailingAnchor),
-            self.passwordTextView.topAnchor.constraint(equalTo: self.emailTextView.bottomAnchor, constant: 8),
+            self.passwordTextView.topAnchor.constraint(equalTo: self.emailTextView.bottomAnchor, constant: 15),
             self.passwordTextView.heightAnchor.constraint(equalToConstant: 48.0),
+            
         ]
         
         let signInButtonConstraints = [
             self.signInButton.leadingAnchor.constraint(equalTo: self.emailTextView.leadingAnchor),
             self.signInButton.trailingAnchor.constraint(equalTo: self.emailTextView.trailingAnchor),
-            self.signInButton.topAnchor.constraint(equalTo: self.passwordTextView.bottomAnchor, constant: 8),
+            self.signInButton.topAnchor.constraint(equalTo: self.passwordTextView.bottomAnchor, constant: 15),
             self.signInButton.heightAnchor.constraint(equalToConstant: 48.0),
         ]
         

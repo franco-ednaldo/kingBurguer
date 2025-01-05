@@ -35,7 +35,7 @@ class SignInViewController: UIViewController {
         email.delegate = self
         email.returnKeyType = .next
         email.borderStyle = .roundedRect
-       // email.attributedPlaceholder = NSAttributedString(string: "Digite seu e-mail", attributes: [NSAttributedString.Key.foregroundColor : UIColor.red])
+        // email.attributedPlaceholder = NSAttributedString(string: "Digite seu e-mail", attributes: [NSAttributedString.Key.foregroundColor : UIColor.red])
         return email
     }()
     
@@ -68,10 +68,10 @@ class SignInViewController: UIViewController {
         button.addTarget(self, action: #selector(tappedSignUpButton), for: .touchUpInside)
         return button
     }()
-     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = .systemBackground
         navigationItem.title = "Login"
         
         initLayout()
@@ -81,7 +81,7 @@ class SignInViewController: UIViewController {
                                                selector: #selector(onKeyBoardNotification),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object: nil)
-
+        
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(onKeyBoardNotification),
                                                name: UIResponder.keyboardWillShowNotification,
@@ -102,7 +102,7 @@ class SignInViewController: UIViewController {
     @objc private func dismissKeyboard(_ view: UITapGestureRecognizer) {
         self.view.endEditing(true)
     }
-
+    
     @objc private func tappedSignInButton(_ sender: UIButton) {
         viewModel?.send()
     }
@@ -139,7 +139,7 @@ class SignInViewController: UIViewController {
         container.addSubview(self.signInButton)
         container.addSubview(self.signUpButton)
     }
-
+    
     private func addConstraints() {
         let scrollContraints = [
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -149,8 +149,8 @@ class SignInViewController: UIViewController {
         ]
         
         let heightConstraint = container.heightAnchor.constraint(equalTo: view.heightAnchor )
-               heightConstraint.priority = .defaultLow
-               heightConstraint.isActive = true
+        heightConstraint.priority = .defaultLow
+        heightConstraint.isActive = true
         
         let containerConstraints = [
             container.widthAnchor.constraint(equalTo: view.widthAnchor),

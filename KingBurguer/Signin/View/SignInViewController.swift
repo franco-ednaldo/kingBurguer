@@ -27,27 +27,25 @@ class SignInViewController: UIViewController {
         return view
     }()
     
-    lazy var emailTextView: PlaceholderPaddedTextField = {
-        let email = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
+    lazy var emailTextView: TextField = {
+        let email = TextField()
         email.backgroundColor = .white
         email.placeholder = "Digite seu e-mail"
-        email.translatesAutoresizingMaskIntoConstraints = false
+        email.error = "E-mail inválido"
+        email.failure = validation
         email.delegate = self
         email.returnKeyType = .next
-        email.borderStyle = .roundedRect
         // email.attributedPlaceholder = NSAttributedString(string: "Digite seu e-mail", attributes: [NSAttributedString.Key.foregroundColor : UIColor.red])
         return email
     }()
     
-    lazy var passwordTextView: PlaceholderPaddedTextField = {
-        let password = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
+    lazy var passwordTextView: TextField = {
+        let password = TextField()
         password.backgroundColor = .white
         password.placeholder = "Digite sua senha"
-        password.translatesAutoresizingMaskIntoConstraints = false
         password.isSecureTextEntry = true
         password.returnKeyType = .done
         password.delegate = self
-        password.borderStyle = .roundedRect
         return password
     }()
     
@@ -62,7 +60,7 @@ class SignInViewController: UIViewController {
     lazy var signUpButton: UIButton = {
         let button = UIButton()
         button.setTitle("Criar conta", for: .normal)
-        button.setTitleColor(.white, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.layer.cornerRadius = 8
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(tappedSignUpButton), for: .touchUpInside)
@@ -131,6 +129,10 @@ class SignInViewController: UIViewController {
         }
     }
     
+    private func validation() -> Bool {
+        return self.emailTextView.text.count <= 3
+    }
+    
     private func initLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(container)
@@ -164,14 +166,12 @@ class SignInViewController: UIViewController {
             self.emailTextView.topAnchor.constraint(equalTo: container.topAnchor, constant: 300),
             self.emailTextView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 25),
             self.emailTextView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -25),
-            self.emailTextView.heightAnchor.constraint(equalToConstant: 48.0),
         ]
         
         let passwordConstraints = [
             self.passwordTextView.leadingAnchor.constraint(equalTo: self.emailTextView.leadingAnchor),
             self.passwordTextView.trailingAnchor.constraint(equalTo: self.emailTextView.trailingAnchor),
-            self.passwordTextView.topAnchor.constraint(equalTo: self.emailTextView.bottomAnchor, constant: 15),
-            self.passwordTextView.heightAnchor.constraint(equalToConstant: 48.0),
+            self.passwordTextView.topAnchor.constraint(equalTo: self.emailTextView.bottomAnchor, constant: 10),
             
         ]
         
@@ -225,7 +225,7 @@ extension SignInViewController: UITextFieldDelegate {
         if textField.returnKeyType == .done {
             view.endEditing(true)
         } else{
-            passwordTextView.becomeFirstResponder()
+            passwordTextView.gainFocus()
         }
         return false
     }

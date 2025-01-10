@@ -29,73 +29,74 @@ class SignUpViewController: UIViewController {
         return view
     }()
     
-    lazy var nameTextField: PlaceholderPaddedTextField = {
-        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.backgroundColor = .white
+    lazy var nameTextField: TextField = {
+        let textField = TextField()
         textField.placeholder = "Digite o nome"
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 8.0
-        textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.returnKeyType = .next
-        textField.tag = 1
         textField.delegate = self
+        textField.tag = 1
+        textField.error = "Nome inválido!"
+        textField.failure = {
+            return !textField.text.isEmail()
+        }
         return textField
     }()
     
-    lazy var emailTextField: PlaceholderPaddedTextField = {
-        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
-        textField.translatesAutoresizingMaskIntoConstraints = false
+    lazy var emailTextField: TextField = {
+        let textField = TextField()
         textField.backgroundColor = .white
         textField.placeholder = "Digite o e-mail"
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 8.0
-        textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.returnKeyType = .next
         textField.tag = 2
         textField.delegate = self
+        textField.keyBoardType = .emailAddress
+        textField.error = "e-mail inválido!"
+        textField.failure = {
+            return textField.text.count <= 10
+        }
         return textField
     }()
     
-    lazy var IDCardTextField: PlaceholderPaddedTextField = {
-        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
-        textField.translatesAutoresizingMaskIntoConstraints = false
+    lazy var IDCardTextField: TextField = {
+        let textField = TextField()
         textField.backgroundColor = .white
         textField.placeholder = "Digite o CPF"
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 8.0
-        textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.returnKeyType = .next
-        textField.tag = 3
         textField.delegate = self
+        textField.tag = 3
+        textField.error = "CPF inválido!"
+        textField.failure = {
+            return textField.text.count != 14
+        }
         return textField
     }()
     
-    lazy var birthDay: PlaceholderPaddedTextField = {
-        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
-        textField.translatesAutoresizingMaskIntoConstraints = false
+    lazy var birthDay: TextField = {
+        let textField = TextField()
         textField.backgroundColor = .white
         textField.placeholder = "Digite data de nascimento"
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 8.0
-        textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.returnKeyType = .next
         textField.tag = 4
+        textField.error = "Data inválida!"
+        textField.failure = {
+            return textField.text.count < 10
+        }
+
         textField.delegate = self
         return textField
     }()
     
-    lazy var passwordTextField: PlaceholderPaddedTextField = {
-        let textField = PlaceholderPaddedTextField(padding: UIEdgeInsets(top: 15, left: 10, bottom: 15, right: 0))
-        textField.translatesAutoresizingMaskIntoConstraints = false
+    lazy var passwordTextField: TextField = {
+        let textField = TextField()
         textField.backgroundColor = .white
         textField.placeholder = "Digite sua senha"
-        textField.layer.borderWidth = 1.0
-        textField.layer.cornerRadius = 8.0
-        textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.returnKeyType = .done
-        textField.tag = 5
         textField.delegate = self
+        textField.tag = 5
+        textField.error = "Senha inválida!"
+        textField.failure = {
+            return textField.text.count <= 3
+        }
         return textField
     }()
     
@@ -185,44 +186,38 @@ class SignUpViewController: UIViewController {
             self.nameTextField.topAnchor.constraint(equalTo: self.container.topAnchor, constant: 60),
             self.nameTextField.leadingAnchor.constraint(equalTo: self.container.leadingAnchor, constant: 25),
             self.nameTextField.trailingAnchor.constraint(equalTo: self.container.trailingAnchor, constant: -25),
-            self.nameTextField.heightAnchor.constraint(equalToConstant: 50),
         ]
         
         let emailTextFieldConstraints = [
-            self.emailTextField.topAnchor.constraint(equalTo: self.nameTextField.bottomAnchor, constant: 15),
+            self.emailTextField.topAnchor.constraint(equalTo: self.nameTextField.bottomAnchor, constant: 10),
             self.emailTextField.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.emailTextField.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.emailTextField.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
         ]
         
         let IDCardTextFieldConstraints = [
-            self.IDCardTextField.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 15),
+            self.IDCardTextField.topAnchor.constraint(equalTo: self.emailTextField.bottomAnchor, constant: 10),
             self.IDCardTextField.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.IDCardTextField.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.IDCardTextField.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
         ]
         
         let birthDayConstraints = [
-            self.birthDay.topAnchor.constraint(equalTo: self.IDCardTextField.bottomAnchor, constant: 15),
+            self.birthDay.topAnchor.constraint(equalTo: self.IDCardTextField.bottomAnchor, constant: 10),
             self.birthDay.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.birthDay.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.birthDay.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
         ]
-        
-       
+
         
         let passwordTextFieldConstraints = [
-            self.passwordTextField.topAnchor.constraint(equalTo: self.birthDay.bottomAnchor, constant: 15),
+            self.passwordTextField.topAnchor.constraint(equalTo: self.birthDay.bottomAnchor, constant: 10),
             self.passwordTextField.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.passwordTextField.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.passwordTextField.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
+            
         ]
         
         let registerButtonConstraints = [
-            self.registerButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 15),
+            self.registerButton.topAnchor.constraint(equalTo: self.passwordTextField.bottomAnchor, constant: 10),
             self.registerButton.leadingAnchor.constraint(equalTo: self.nameTextField.leadingAnchor),
             self.registerButton.trailingAnchor.constraint(equalTo: self.nameTextField.trailingAnchor),
-            self.registerButton.heightAnchor.constraint(equalTo: self.nameTextField.heightAnchor),
         ]
         
         NSLayoutConstraint.activate(scrollViewConstraints)
@@ -267,9 +262,9 @@ extension SignUpViewController: UITextFieldDelegate {
         }
         
         let nextTag = textField.tag + 1
-        let component = container.findViewById(tag: nextTag)
+        let component = container.findViewById(tag: nextTag) as? TextField
         if let field = component {
-            field.becomeFirstResponder()
+            field.gainFocus()
         } else {
             view.endEditing(true)
         }
